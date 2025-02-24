@@ -211,7 +211,7 @@ def convert_to_mp3(audio_array: np.ndarray, sample_rate: int = 24000) -> bytes:
     process = (
         ffmpeg
         .input('pipe:0', format='wav')
-        .output('pipe:1', format='mp3', audio_bitrate='44.1k')
+        .output('pipe:1', format='mp3', audio_bitrate='96k')
         .run_async(pipe_stdin=True, pipe_stdout=True, pipe_stderr=True)
     )
     mp3_data, err = process.communicate(input=wav_data)

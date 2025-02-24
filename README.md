@@ -1,11 +1,12 @@
-# Minimalistic Kokoro on Modal
+# TTS Modal API
 
 This project provides an easy way to launch a minimalistic version of Kokoro and Zonos on Modal. Modal offers a monthly credit of $30 and allows you to rent GPUs, making it a cost-effective solution for running your AI applications.
 
 # WHAT IS INSIDE:
 - kokoro_remsky.py : launch https://github.com/remsky/Kokoro-FastAPI in modal
-- kokoro_api.py: rebuild of a simple fastapi based on openAI, handle just mp3, a bit faster then remsky
+- kokoro_api.py: rebuild of a simple fastapi handle just mp3, a bit faster then remsky
 - zonos_og.py: launch https://github.com/Zyphra/Zonos
+- Both kokoro can be used with openai lib as the endpoint is very similar, check the swagger to see the exact params.
 
 # Create a Modal Account (needed for all)
 - Visit [modal.com](https://modal.com) and sign up for an account.
@@ -15,19 +16,17 @@ You just need modal so any python will do as long as you can have a decently rec
 ```bash
 python3 -m pip install modal
 python3 -m modal setup
-modal serve kokoro_remsky.py
-modal serve zonos_og.py
 ```
 
-## Kokoro setup:
+## Kokoro launch:
 ```bash
-modal serve zonos.py
+modal serve kokoro_remsky.py
 ```
 - you will get a link, click on it and add /docs to see the swagger of fastapi
 
-## Zonos setup:
+## Zonos launch:
 ```bash
-modal serve zonos.py
+modal serve zonos_og.py
 ```
 - you will get an url in the text click on it, it will launch the container
 - when the container is launched it will provide a public gradio url, click on it
@@ -58,6 +57,7 @@ There is probably a way to not install anything other then modal localy, when I 
 ```bash
 modal setup
 ```
+or
 ```bash
 python -m modal setup
 ```

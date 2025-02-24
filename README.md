@@ -37,6 +37,10 @@ The url will look something like this:
 ```bash
 https://username--project_name-api-dev.modal.run/
 ```
+A lot of project will enable the export of an env key so export this url/v1
+```bash
+export OPENAI_BASE_URL=https://username--project_name-api-dev.modal.run/v1
+```
 The swagger of fastapi will be ready at this url/docs
 ### Performance
 

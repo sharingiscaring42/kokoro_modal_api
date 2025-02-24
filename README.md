@@ -1,4 +1,4 @@
-# Minimalistic Kokoro on Modal
+# TTS Modal API
 
 This project provides an easy way to launch a minimalistic version of Kokoro and Zonos on Modal. Modal offers a monthly credit of $30 and allows you to rent GPUs, making it a cost-effective solution for running your AI applications.
 

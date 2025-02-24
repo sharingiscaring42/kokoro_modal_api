@@ -28,7 +28,7 @@ python -m modal setup
 ```
 ### 5. Launch
 ```bash
-modal serve main.py
+modal serve kokoro.py
 ```
 ### URL
 A URL will be provided in the terminal. Use this URL to link your OpenAI AI instance to this project.
@@ -57,8 +57,21 @@ Quick numbers:
 - Streaming: Streaming functionality is not supported yet
 - Only MP3 raw output supported for now
 
+### ZONOS TEST
+if you want to quickly test zonos I added it here.
+The step run it start the same
+```bash
+modal serve zonos.py
+```
+you will get an url in the text click on it, it will launch the container
+when the container is launched it will provide a public gradio url
+click on it
+the init take a while, once the loading is finished you can use it
+the first launch of a generation takes long as it still need to load some other stuff
+Subsequent generation on a A100 was around 1.42x real time
 
-### Eample output
+
+### Eample output KOKORO
 
 ```bash
 [2025-02-24T15:11:21.313996] 💪 STARTING ASGI 💪
@@ -85,3 +98,8 @@ In circuits bright and l ... k you—reach the sky!
    POST /v1/audio/speech -> 200 OK  (duration: 2.79 s, execution: 2.66 s)
 Disconnecting from Modal - This will terminate your Modal app in a few seconds.
 ```
+
+
+### Eample output ZONOS
+
+

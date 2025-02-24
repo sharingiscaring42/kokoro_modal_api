@@ -4,8 +4,9 @@ This project provides an easy way to launch a minimalistic version of Kokoro and
 
 # WHAT IS INSIDE:
 - kokoro_remsky.py : launch https://github.com/remsky/Kokoro-FastAPI in modal
-- kokoro_api.py: rebuild of a simple fastapi based on openAI, handle just mp3, a bit faster then remsky
+- kokoro_api.py: rebuild of a simple fastapi handle just mp3, a bit faster then remsky
 - zonos_og.py: launch https://github.com/Zyphra/Zonos
+Both kokoro can be used with openai lib as the endpoint is very similar, check the swagger to see the exact params.
 
 # Create a Modal Account (needed for all)
 - Visit [modal.com](https://modal.com) and sign up for an account.

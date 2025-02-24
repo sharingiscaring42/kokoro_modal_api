@@ -15,19 +15,17 @@ You just need modal so any python will do as long as you can have a decently rec
 ```bash
 python3 -m pip install modal
 python3 -m modal setup
-modal serve kokoro_remsky.py
-modal serve zonos_og.py
 ```
 
-## Kokoro setup:
+## Kokoro launch:
 ```bash
-modal serve zonos.py
+modal serve kokoro_remsky.py
 ```
 - you will get a link, click on it and add /docs to see the swagger of fastapi
 
-## Zonos setup:
+## Zonos launch:
 ```bash
-modal serve zonos.py
+modal serve zonos_og.py
 ```
 - you will get an url in the text click on it, it will launch the container
 - when the container is launched it will provide a public gradio url, click on it

@@ -1,12 +1,47 @@
 # Minimalistic Kokoro on Modal
 
-This project provides an easy way to launch a minimalistic version of Kokoro on Modal. Modal offers a monthly credit of $30 and allows you to rent GPUs, making it a cost-effective solution for running your AI applications. Our tests have shown that the T40 GPU is the most cost-efficient option, delivering speeds of approximately 25–30× real time.
+This project provides an easy way to launch a minimalistic version of Kokoro and Zonos on Modal. Modal offers a monthly credit of $30 and allows you to rent GPUs, making it a cost-effective solution for running your AI applications.
 
-## Getting Started
+# WHAT IS INSIDE:
+- kokoro_remsky.py : launch https://github.com/remsky/Kokoro-FastAPI in modal
+- kokoro_api.py: rebuild of a simple fastapi based on openAI, handle just mp3, a bit faster then remsky
+- zonos_og.py: launch https://github.com/Zyphra/Zonos
 
-### 1. Create a Modal Account
+# Create a Modal Account (needed for all)
 - Visit [modal.com](https://modal.com) and sign up for an account.
 
+# For kokoro_remsky and zonos_og:
+You just need modal so any python will do as long as you can have a decently recent modal, check on their website for compatibilities
+```bash
+python3 -m pip install modal
+python3 -m modal setup
+modal serve kokoro_remsky.py
+modal serve zonos_og.py
+```
+
+## Kokoro setup:
+```bash
+modal serve zonos.py
+```
+- you will get a link, click on it and add /docs to see the swagger of fastapi
+
+## Zonos setup:
+```bash
+modal serve zonos.py
+```
+- you will get an url in the text click on it, it will launch the container
+- when the container is launched it will provide a public gradio url, click on it
+- the init take a while, once the loading is finished you can use it
+- the first launch of a generation takes long as it still need to load some other stuff
+- Subsequent generation on a A100 was around 1.42x real time
+
+## Performance
+- kokoro_remsky seems to be in the 20-25x real time range  on a T4
+- zonos_og seems to be around 1.40x on a A100
+
+
+# For kokoro_api:
+You need to install a bunch of lib so better go with a virtual env
 ### 2. Set Up Your Virtual Environment
 Tested on python3.11 but anything that won't block the startup so mostly same version will work as the code is all executed remotly anyway
 ```bash
@@ -28,7 +63,7 @@ python -m modal setup
 ```
 ### 5. Launch
 ```bash
-modal serve kokoro.py
+modal serve kokoro_api.py
 ```
 ### URL
 A URL will be provided in the terminal. Use this URL to link your OpenAI AI instance to this project.
@@ -60,20 +95,6 @@ Quick numbers:
 - Multi-Voice Support: Currently not available
 - Streaming: Streaming functionality is not supported yet
 - Only MP3 raw output supported for now
-
-### ZONOS TEST
-if you want to quickly test zonos I added it here.
-The step run it start the same
-```bash
-modal serve zonos.py
-```
-- you will get an url in the text click on it, it will launch the container
-- when the container is launched it will provide a public gradio url
-- click on it
-- the init take a while, once the loading is finished you can use it
-- the first launch of a generation takes long as it still need to load some other stuff
-- Subsequent generation on a A100 was around 1.42x real time
-
 
 ### Eample output KOKORO
 

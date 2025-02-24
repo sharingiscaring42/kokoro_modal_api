@@ -53,7 +53,7 @@ class KokoroPipeline:
         self.sample_rate = 24000
 
     @modal.method()
-    def generate_speech(self, text: str, voice: str = "am_michael", speed: float = 1.0) -> bytes:
+    def generate_speech(self, text: str, voice: str = "am_michael", speed: float = 1.0, format="mp3") -> bytes:
         extracted_language = voice[:1]
         self.engine.load_model(extracted_language)  # Ensure model is loaded
         timestamped_print(f"🎙️ Processing: {text[:25]} ... {text[-25:]}")
@@ -74,8 +74,8 @@ class KokoroPipeline:
             total_duration += duration 
             audio_chunks.append(convert_tensor_to_int16(audio))
         concatenated_audio = np.concatenate(audio_chunks)
-        mp3_data = convert_to_mp3(concatenated_audio)
-        return mp3_data , total_duration
+        mp3_data = convert_audio(concatenated_audio, format)
+        return mp3_data , format, total_duration
 
 def convert_tensor_to_int16(audio,):
     audio_array = audio.cpu().numpy()
@@ -153,13 +153,15 @@ class KokoroAPI:
         @self.app.post("/v1/audio/speech")
         async def generate(request: SpeechRequest):
             try:
+                assert request.response_format in ["mp3","opus","aac","wav"], f"Invalid response_format: 'response_format'. Must be one of [mp3,opus,acc,wav]"
                 assert request.voice in self.voices_list, f"Invalid language: '{request.voice}'. Must be one of {self.voices_list}"
                 assert request.model in self.models, f"Invalid model: '{request.model}'. Must be one of {self.models}"
                 time_start_request = datetime.now()
-                mp3_data, duration = self.pipeline.generate_speech.remote(
+                audio_data, container, duration = self.pipeline.generate_speech.remote(
                     request.input,
                     request.voice,
-                    request.speed
+                    request.speed,
+                    request.response_format
                 )
                 time_spend = (datetime.now() - time_start_request).total_seconds()
                 ratio_speed = duration / time_spend if time_spend else 0.0
@@ -168,7 +170,7 @@ class KokoroAPI:
                     f"🎵 AUDIO SEND 🎵 - GPU: {gpu_config} | Compute Time: {time_spend:.2f}s | Speed Ratio: {ratio_speed:.2f}"
                     # f"🎵 AUDIO SEND 🎵 - GPU: {gpu_config} | Compute Time: {time_spend:.2f}s | Speed Ratio: {ratio_speed:.2f} | Chars: {num_chars} | Words: {num_words}"
                 )
-                return Response(content=mp3_data, media_type="audio/mpeg")
+                return Response(content=audio_data, media_type=f"audio/{container}")
             except Exception as e:
                 return Response(
                     content=f"Error generating speech: {str(e)}",
@@ -202,20 +204,30 @@ def convert_tensor_to_int16(audio_tensor):
         audio_array = (audio_array * 32767).clip(-32768, 32767).astype(np.int16)
     return audio_array
 
-def convert_to_mp3(audio_array: np.ndarray, sample_rate: int = 24000) -> bytes:
+def convert_audio(audio_array: np.ndarray, format, sample_rate: int = 24000) -> bytes:
     
     wav_buffer = io.BytesIO()
     sf.write(wav_buffer, audio_array, sample_rate, format='WAV')
     wav_data = wav_buffer.getvalue()
     
+    
+    if format == "mp3":
+        bitrate = "96k"
+    elif format == "opus":
+        bitrate = "32k"
+    elif format == "aac":
+        bitrate = "96k"
+    elif format == "wav":
+        return wav_data
+    
     process = (
         ffmpeg
         .input('pipe:0', format='wav')
-        .output('pipe:1', format='mp3', audio_bitrate='96k')
+        .output('pipe:1', format=format, audio_bitrate=bitrate)
         .run_async(pipe_stdin=True, pipe_stdout=True, pipe_stderr=True)
     )
-    mp3_data, err = process.communicate(input=wav_data)
-    return mp3_data
+    audio_data, err = process.communicate(input=wav_data)
+    return audio_data
 
 #################### DEPLOYMENT ####################
 @app.function(image=image_kokoro, concurrency_limit=1)

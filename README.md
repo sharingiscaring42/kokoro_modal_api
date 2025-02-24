@@ -67,12 +67,12 @@ The step run it start the same
 ```bash
 modal serve zonos.py
 ```
-you will get an url in the text click on it, it will launch the container
-when the container is launched it will provide a public gradio url
-click on it
-the init take a while, once the loading is finished you can use it
-the first launch of a generation takes long as it still need to load some other stuff
-Subsequent generation on a A100 was around 1.42x real time
+- you will get an url in the text click on it, it will launch the container
+- when the container is launched it will provide a public gradio url
+- click on it
+- the init take a while, once the loading is finished you can use it
+- the first launch of a generation takes long as it still need to load some other stuff
+- Subsequent generation on a A100 was around 1.42x real time
 
 
 ### Eample output KOKORO

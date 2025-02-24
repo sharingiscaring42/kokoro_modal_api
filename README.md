@@ -56,6 +56,7 @@ There is probably a way to not install anything other then modal localy, when I 
 ```bash
 modal setup
 ```
+or
 ```bash
 python -m modal setup
 ```
